@@ -16,7 +16,7 @@ Proyek ini berfokus pada optimalisasi manajemen persediaan barang (*inventory*).
 * **Business Intelligence & Analytics Engine:** Power BI Desktop
 * **Pola Pemrosesan Data:** Rumus perhitungan untuk Total Revenue menggunakan MySQL, sedangkan beberapa perhitungan lainnya dilakukan menggunakan DAX di Power BI.
 
-## 4. Dashboard Visualisasi & Fitur Interaktif
+## 4. Dashboard Visualisasi
 
 ![Dashboard Preview](screenshots/dashboard.png)
 
@@ -82,8 +82,10 @@ Melalui indikator otomatis *"Reorder Urgent"* pada tabel, sistem mendeteksi titi
 Dasbor berhasil mengalkulasi kuantitas pengadaan ulang secara presisi dengan membandingkan sisa stok riil versus akumulasi perkiraan permintaan per toko selama 3 bulan ke depan. Sistem secara otomatis menerbitkan rekomendasi kuantitas pemesanan (*Restock Quantity*).
 
 
-##  8. Link Dashboard & RAW Data
+##  8. Link Dashboard
 Visualisasi: [Tautan Portofolio Power BI Service Anda]
+
+## 9. RAW Data
 Sumber Data Mentah: [Kaggle - Retail Store Inventory Forecasting Dataset](https://www.kaggle.com/datasets/anirudhchauhan/retail-store-inventory-forecasting-dataset)
 
 #  Author
