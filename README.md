@@ -1,6 +1,7 @@
 # retail-inventory-forecasting-analysis
 Proyek end-to-end data analytics menggunakan MySQL dan Power BI untuk optimasi inventaris ritel. Dengan sistem forecasting permintaan 3 bulan berbasis DAX untuk mencegah risiko kehabisan stok per toko.
 
+# Retail Inventory Optimization & Sales Forecasting Analytics
 
 ## 1. Latar Belakang
 Proyek ini berfokus pada optimalisasi manajemen persediaan barang (*inventory*). Masalah utama yang diselesaikan dalam proyek ini adalah **meminimalisasi risiko kehabisan stok** yang dapat menghilangkan potensi omset, sekaligus **mencegah penumpukan barang berlebih (overstock)**.
@@ -15,12 +16,16 @@ Proyek ini berfokus pada optimalisasi manajemen persediaan barang (*inventory*).
 * **Business Intelligence & Analytics Engine:** Power BI Desktop
 * **Pola Pemrosesan Data:** Rumus perhitungan untuk Total Revenue menggunakan MySQL, sedangkan beberapa perhitungan lainnya dilakukan menggunakan DAX di Power BI.
 
-# Retail Inventory Optimization & Sales Forecasting Analytics
+## 4. Dashboard Visualisasi & Fitur Interaktif
 
 ![Dashboard Preview](screenshots/dashboard.png)
 
+* Executive KPI Cards: Ringkasan performa finansial bisnis (Total Revenue berbasis mata uang) dan total volume komoditas laku (Total Units Sold).
+* Location & Category Slicers: Kontrol interaktif penuh berdasarkan parameter Wilayah, Kode Toko, dan Kategori Produk secara real-time.
+* Forecast Line Chart: Grafik garis yang mengintegrasikan alur data transaksi masa lalu (garis utuh) dengan jalur ramalan masa depan (garis putus-putus).
+* Optimasisation Table: Tabel untuk optimasisasi stok barang.
 
-## 4. Proses Rekayasa Data & Pembersihan (*Data Engineering & Cleansing*)
+## 5. Proses Rekayasa Data & Pembersihan (*Data Engineering & Cleansing*)
 
 ### A. Penyiapan Database & Impor Data Cepat (MySQL)
 Dataset diupload ke MySQL Workbench menggunakan perintah 'LOAD DATA LOCAL INFILE' untuk mempercepat proses karena data yang banyak.
@@ -34,7 +39,7 @@ Dataset diupload ke MySQL Workbench menggunakan perintah 'LOAD DATA LOCAL INFILE
 * **Penambahan Kolom & Perhitungan:** Membuat kolom tambahan untuk TotalPrice / TotalRevenue di MySQL.
 
 
-# 5. Pemodelan Data & Rumus DAX (*Data Modeling & DAX*)
+## 6. Pemodelan Data & Rumus DAX (*Data Modeling & DAX*)
 
 ### Line Chart (Peramalan / Forecasting Penjualan)
 
@@ -62,10 +67,10 @@ Memproyeksikan total volume kebutuhan produk untuk 3 bulan ke depan.
 #### 7. Kuantitas Aman Untuk Restock (Restock Quantity)
 Menghitung defisit jumlah pasokan.
 
-#### 8. Status Inventory (`Inventory Status`)
+#### 8. Status Inventory (Inventory Status)
 Melabeli sesuai keadaan Stok apakah perlu untuk segera order atau aman atau overstock.
 
-## 6. Temuan Kunci Utama & Rekomendasi Bisnis (*Key Insights*)
+## 7. Temuan Kunci Utama & Rekomendasi Bisnis (*Key Insights*)
 
 *   **Tren Untuk Permintaan (*Demand Forecasting*):** 
 Line Chart berhasil memperlihatkan tren kestabilan volume penjualan. Sebagai contoh, grafik proyeksi mendatar (*baseline projection*) menunjukkan bahwa rata-rata pergerakan kebutuhan barang berada pada jalur yang konsisten pasca-Desember 2023. Hal ini memberikan kepastian bagi manajemen untuk melakukan perencanaan pengadaan tanpa spekulasi yang fluktuatif.
@@ -77,12 +82,18 @@ Melalui indikator otomatis *"Reorder Urgent"* pada tabel, sistem mendeteksi titi
 Dasbor berhasil mengalkulasi kuantitas pengadaan ulang secara presisi dengan membandingkan sisa stok riil versus akumulasi perkiraan permintaan per toko selama 3 bulan ke depan. Sistem secara otomatis menerbitkan rekomendasi kuantitas pemesanan (*Restock Quantity*).
 
 
-## 7. Dashboard Visualisasi & Fitur Interaktif
-* Executive KPI Cards: Ringkasan performa finansial bisnis (Total Revenue berbasis mata uang) dan total volume komoditas laku (Total Units Sold).
-* Location & Category Slicers: Kontrol interaktif penuh berdasarkan parameter Wilayah, Kode Toko, dan Kategori Produk secara real-time.
-* Forecast Line Chart: Grafik garis yang mengintegrasikan alur data transaksi masa lalu (garis utuh) dengan jalur ramalan masa depan (garis putus-putus).
-* Optimasisation Table: Tabel untuk optimasisasi stok barang.
-
 ##  8. Link Dashboard & RAW Data
 Visualisasi: [Tautan Portofolio Power BI Service Anda]
-Sumber Data Mentah: [Kaggle - Retail Store Inventory Forecasting Dataset]
+Sumber Data Mentah: [Kaggle - Retail Store Inventory Forecasting Dataset](https://www.kaggle.com/datasets/anirudhchauhan/retail-store-inventory-forecasting-dataset)
+
+#  Author
+
+**AGUSTIANTO**
+
+Indonesia
+
+# LinkedIn
+ **LinkedIn:** [Agustianto](https://linkedin.com/in/agus-tianto-a305611a5)
+ 
+# Github
+ **GitHub:** [agustianto-lab](https://github.com/agustianto-lab)
