@@ -83,7 +83,7 @@ Dasbor berhasil mengalkulasi kuantitas pengadaan ulang secara presisi dengan mem
 
 
 ##  8. Link Dashboard
-Visualisasi: [Tautan Portofolio Power BI Service Anda]
+Visualisasi: [Dashboard Power BI]
 
 ## 9. RAW Data
 Sumber Data Mentah: [Kaggle - Retail Store Inventory Forecasting Dataset](https://www.kaggle.com/datasets/anirudhchauhan/retail-store-inventory-forecasting-dataset)
