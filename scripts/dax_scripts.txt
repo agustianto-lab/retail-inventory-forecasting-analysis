@@ -1,0 +1,116 @@
+SCRIPT DAX
+
+==============================================
+LINE CHART
+==============================================
+
+
+1. Master_Calendar (Tabel Dimensi Waktu Otomatis)
+---------------------------------------------------
+
+Master_Calendar =
+CALENDAR(
+    MIN('retail_store_inventory_db tbl_inventory'[Date]),       -- Tanggal paling awal di database Anda
+    EDATE(MAX('retail_store_inventory_db tbl_inventory'[Date]), 3) -- Tanggal terakhir di database DITAMBAH 3 bulan ke depan
+)
+---------------------------------------------------------------------------------------------------------------------------
+
+
+2. Year_Month_Calendar (Kolom Agregasi Bulanan)
+--------------------------------------------------
+
+Year_Month_Calendar = EOMONTH(Master_Calendar[Date], 0)
+---------------------------------------------------------------------------------------------------------------------------
+
+
+3. Clean_Units_Sold (Measure Data unit terjual yang dibersihkan)
+---------------------------------------------------------------------------------------------------------------------------
+
+Clean_Units_Sold =
+VAR TanggalTerakhirData = CALCULATE(MAX('retail_store_inventory_db tbl_inventory'[Date]), ALL('retail_store_inventory_db tbl_inventory'))
+VAR TanggalKalenderSaatIni = MAX(Master_Calendar[Date])
+RETURN
+    IF(
+        TanggalKalenderSaatIni < DATE(2024, 1, 1),
+        SUM('retail_store_inventory_db tbl_inventory'[UnitsSold]),
+        BLANK()
+    )
+----------------------------------------------------------------------------------------------------------------------------
+
+
+4. Forecast_Sales_3M_2 (Measure Peramalan / Forecast menggunakan Rata-Rata Bergerak / Moving Average)
+----------------------------------------------------------------------------------------------------------------------------
+
+Forecast_Sales_3M_2 =
+VAR TanggalTerakhirData = CALCULATE(MAX('retail_store_inventory_db tbl_inventory'[Date]), ALL('retail_store_inventory_db tbl_inventory'))
+VAR TanggalKalenderSaatIni = MAX(Master_Calendar[Date])
+RETURN
+    IF(
+        TanggalKalenderSaatIni <= TanggalTerakhirData,
+        -- LOGIKA MASA LALU: Menghitung Moving Average 3 bulanan secara independen
+        CALCULATE(
+            AVERAGEX(
+                VALUES(Master_Calendar[Year_Month_Calendar]),
+                CALCULATE(SUM('retail_store_inventory_db tbl_inventory'[UnitsSold]))
+            ),
+            DATESINPERIOD(Master_Calendar[Date], TanggalKalenderSaatIni, -3, MONTH),
+            ALL(Master_Calendar)
+        ),
+        -- LOGIKA MASA DEPAN: Kunci ramalan menggunakan rata-rata data terakhir yang lengkap
+        -- Cara ini membuat grafik masa depan tidak akan menukik ke angka 0
+        CALCULATE(
+            AVERAGEX(
+                VALUES(Master_Calendar[Year_Month_Calendar]),
+                CALCULATE(SUM('retail_store_inventory_db tbl_inventory'[UnitsSold]))
+            ),
+            DATESINPERIOD(Master_Calendar[Date], TanggalTerakhirData, -3, MONTH),
+            ALL(Master_Calendar)
+        )
+    )
+----------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+====================================================================
+TABEL OPTIMASISASI STOCK
+====================================================================
+
+
+1. Current Stock (Sisa Persediaan Fisik Terakhir Gudang)
+----------------------------------------------------------
+
+Current Stock = CALCULATE(SUM('retail_store_inventory_db tbl_inventory'[InventoryLevel]), LASTDATE('retail_store_inventory_db tbl_inventory'[Date]))
+------------------------------------------------------------------------------------------------
+
+
+2. Projected Demand 3M (Ramalan / Forecast Kebutuhan Stock 3 Bulan)
+--------------------------------------------------------------------------------------------------------------------------
+
+Projected Demand 3M =
+VAR TotalSalesSelectedProduct = SUM('retail_store_inventory_db tbl_inventory'[UnitsSold])
+VAR TotalMonths = DISTINCTCOUNT('retail_store_inventory_db tbl_inventory'[Year_Month])
+VAR TotalStoresGlobal = CALCULATE(DISTINCTCOUNT('retail_store_inventory_db tbl_inventory'[StoreID]), ALL('retail_store_inventory_db tbl_inventory'))
+VAR AverageSalesPerMonthPerStore = DIVIDE(TotalSalesSelectedProduct, TotalMonths * IF(ISFILTERED('retail_store_inventory_db tbl_inventory'[StoreID]), 1, TotalStoresGlobal), 0)
+RETURN
+    AverageSalesPerMonthPerStore * 3
+---------------------------------------------------------------------------------------------------------------------------
+
+
+3. Restock Quantity (Perhitungan Kuantitas Pemesanan Ulang untuk Stock)
+---------------------------------------------------------------------------------------------------------------------------
+
+Restock Quantity = VAR Gap = [Projected Demand 3M] - [Current Stock] RETURN IF(Gap > 0, Gap, 0)
+---------------------------------------------------------------------------------------------------------------------------
+
+
+4. Inventory Status (Indikator Status Inventory)
+---------------------------------------------------------------------------------------------------------------------------
+
+Inventory Status =
+IF(
+    [Restock Quantity] > 0,
+    "Reorder Urgent",
+    "Aman (Overstock)"
+)
+--------------------------------------------------------------------------------------------------------------------------
